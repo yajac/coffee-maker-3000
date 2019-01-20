@@ -24,7 +24,7 @@ Globals:
       Role: !Ref CodeDeployRole
 
 Resources:
-  GetHelloWorld:
+  AddCoffeeMaker:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
@@ -34,11 +34,11 @@ Resources:
         - LambdaExecutionRole
         - Arn
       Events:
-        GetEvent:
+        AddMaker:
           Type: Api
           Properties:
             Path: /
-            Method: get
+            Method: post
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda
     Type: AWS::IAM::Role

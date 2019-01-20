@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -11,6 +12,8 @@ import (
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	fmt.Printf("Request: %v\n", request)
+
 	index, err := ioutil.ReadFile("public/index.html")
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
@@ -20,7 +23,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		StatusCode: 200,
 		Body:       string(index),
 		Headers: map[string]string{
-			"Content-Type": "text/html",
+			"Content-Type": "application/json",
 		},
 	}, nil
 
