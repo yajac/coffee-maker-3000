@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestHandler(t *testing.T) {
+func TestMadeHandler(t *testing.T) {
 
 	request := events.APIGatewayProxyRequest{}
 	expectedResponse := events.APIGatewayProxyResponse{
@@ -14,10 +14,10 @@ func TestHandler(t *testing.T) {
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
-		Body: "FRESH COFFEE!! - ",
+		Body: "{}",
 	}
 
-	response, err := Handler(request)
+	response, err := MadeHandler(request)
 
 	assert.Equal(t, response.Headers, expectedResponse.Headers)
 	assert.Contains(t, response.Body, expectedResponse.Body)
