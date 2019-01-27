@@ -24,7 +24,7 @@ Globals:
       Role: !Ref CodeDeployRole
 
 Resources:
-  AddCoffeeMaker:
+  GetCoffee:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
@@ -33,6 +33,15 @@ Resources:
         Fn::GetAtt:
         - LambdaExecutionRole
         - Arn
+  AddCoffeeMaker:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: madeMain
+      Runtime: go1.x
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
       Events:
         AddMaker:
           Type: Api
