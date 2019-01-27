@@ -12,7 +12,7 @@ type Message struct {
 	Channel     string       `json:"channel"`
 	Text        string       `json:"text"`
 	IconEmoji   string       `json:"icon_emoji"`
-	ImageUrl    string       `json:"image_url"`
+	ImageURL    string       `json:"image_url"`
 	Attachments []Attachment `json:"attachments"`
 }
 
