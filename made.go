@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-// Handler is executed by AWS Lambda in the main function. Once the request
+// MadeHandler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func MadeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 

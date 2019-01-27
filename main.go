@@ -7,25 +7,21 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-//Event properties
+//Message properties
 type Message struct {
 	Channel     string       `json:"channel"`
 	Text        string       `json:"text"`
-	Icon_emoji  string       `json:"icon_emoji"`
-	Image_url   string       `json:"image_url"`
+	IconEmoji   string       `json:"icon_emoji"`
+	ImageUrl    string       `json:"image_url"`
 	Attachments []Attachment `json:"attachments"`
 }
 
 //Attachment properties
 type Attachment struct {
-	Channel    string             `json:"channel"`
-	Text       string             `json:"text"`
-	Icon_emoji string             `json:"icon_emoji"`
-	Image_url  string             `json:"image_url"`
-	Fields     []AttachmentFields `json:"fields"`
+	Fields []AttachmentFields `json:"fields"`
 }
 
-//Attachment Field properties
+//AttachmentFields properties
 type AttachmentFields struct {
 	Title string `json:"title"`
 	Short bool   `json:"short"`
@@ -39,9 +35,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	fmt.Printf("Request: %v\n", request)
 
 	itemBytes, err := json.Marshal(Message{
-		Channel:    "#richmondcoffee",
-		Text:       "FRESH COFFEE!! - ",
-		Icon_emoji: ":coffee:",
+		Channel:   "#richmondcoffee",
+		Text:      "FRESH COFFEE!! - ",
+		IconEmoji: ":coffee:",
 	})
 
 	fmt.Printf("itemJSON: %v\n", string(itemBytes))
