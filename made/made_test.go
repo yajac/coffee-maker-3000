@@ -1,4 +1,4 @@
-package main
+package made
 
 import (
 	"github.com/aws/aws-lambda-go/events"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestMadeHandler(t *testing.T) {
+func TestHandler(t *testing.T) {
 
 	request := events.APIGatewayProxyRequest{}
 	expectedResponse := events.APIGatewayProxyResponse{
@@ -17,7 +17,7 @@ func TestMadeHandler(t *testing.T) {
 		Body: "{}",
 	}
 
-	response, err := MadeHandler(request)
+	response, err := Handler(request)
 
 	assert.Equal(t, response.Headers, expectedResponse.Headers)
 	assert.Contains(t, response.Body, expectedResponse.Body)

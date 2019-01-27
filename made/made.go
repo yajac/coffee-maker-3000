@@ -1,4 +1,4 @@
-package main
+package made
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-// MadeHandler is executed by AWS Lambda in the main function. Once the request
+// Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
-func MadeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	fmt.Printf("Request: %v\n", request)
 
@@ -22,6 +22,6 @@ func MadeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 
 }
 
-func madeMain() {
-	lambda.Start(MadeHandler)
+func main() {
+	lambda.Start(Handler)
 }
