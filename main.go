@@ -1,31 +1,11 @@
 package main
 
 import (
-	"encoding/json"
+	"./iot"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
-
-//Message properties
-type Message struct {
-	Channel     string       `json:"channel"`
-	Text        string       `json:"text"`
-	IconEmoji   string       `json:"icon_emoji"`
-	ImageURL    string       `json:"image_url"`
-	Attachments []Attachment `json:"attachments"`
-}
-
-//Attachment properties
-type Attachment struct {
-	Fields []AttachmentFields `json:"fields"`
-}
-
-//AttachmentFields properties
-type AttachmentFields struct {
-	Title string `json:"title"`
-	Short bool   `json:"short"`
-}
 
 // Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
@@ -34,13 +14,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Request: %v\n", request)
 
-	itemBytes, err := json.Marshal(Message{
-		Channel:   "#richmondcoffee",
-		Text:      "FRESH COFFEE!! - ",
-		IconEmoji: ":coffee:",
-	})
+	iotResponse, err := made.HandleIOTEvent()
 
-	fmt.Printf("itemJSON: %v\n", string(itemBytes))
+	fmt.Printf("IOTResponse: %v\n", iotResponse)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
@@ -48,7 +24,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(itemBytes),
+		Body:       string(iotResponse),
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
