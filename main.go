@@ -9,7 +9,6 @@ import (
 
 // Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
-// "https://hooks.slack.com/services/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"
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	fmt.Printf("Request: %v\n", request)
@@ -24,7 +23,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(iotResponse),
+		Body:       "",
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},

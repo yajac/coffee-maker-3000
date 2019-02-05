@@ -14,13 +14,13 @@ func TestHandler(t *testing.T) {
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
-		Body: "FRESH COFFEE!! - ",
+		Body: "",
 	}
 
 	response, err := Handler(request)
 
 	assert.Equal(t, response.Headers, expectedResponse.Headers)
-	assert.Contains(t, response.Body, expectedResponse.Body)
+	assert.Equal(t, response.Body, expectedResponse.Body)
 	assert.Equal(t, err, nil)
 
 }
