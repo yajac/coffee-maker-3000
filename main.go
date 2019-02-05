@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./iot"
+	"./slack"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -14,7 +14,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Request: %v\n", request)
 
-	iotResponse, err := made.HandleIOTEvent()
+	iotResponse, err := slack.HandleIOTEvent()
 
 	fmt.Printf("IOTResponse: %v\n", iotResponse)
 
