@@ -1,11 +1,12 @@
 package main
 
 import (
-	"./slack"
 	"fmt"
+	"net/url"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"net/url"
+	"github.com/yajac/coffee-maker-3000/slack"
 )
 
 // Handler is executed by AWS Lambda in the main function. Once the request
