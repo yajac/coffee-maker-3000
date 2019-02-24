@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./slack"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -26,13 +27,21 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Command: %v\n", command)
 
-	text := values["text"]
+	username := values["user_name"][0]
+	text := values["text"][0]
+	channel := values["channel_name"][0]
 
-	fmt.Printf("Text: %v\n", text)
+	fmt.Printf("Request Values: %v %v\n", text, username)
+
+	response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
+
+	if slackErr != nil {
+		return events.APIGatewayProxyResponse{}, slackErr
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       "",
+		Body:       string(response),
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},

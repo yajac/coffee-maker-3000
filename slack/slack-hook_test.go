@@ -8,7 +8,7 @@ func Test_handleIOTEvent(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{"channel", "{\"channel\":\"#richmondcoffee\",\"text\":\"FRESH COFFEE!! - \",\"icon_emoji\":\":coffee:\",\"image_url\":\"\",\"attachments\":null}", false},
+		{"channel", "{\"channel\":\"#richmondcoffee\",\"text\":\"FRESH COFFEE!! - \",\"icon_emoji\":\":coffee:\"}", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

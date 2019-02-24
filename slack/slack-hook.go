@@ -9,9 +9,9 @@ import (
 type Message struct {
 	Channel     string       `json:"channel"`
 	Text        string       `json:"text"`
-	IconEmoji   string       `json:"icon_emoji"`
-	ImageURL    string       `json:"image_url"`
-	Attachments []Attachment `json:"attachments"`
+	IconEmoji   string       `json:"icon_emoji,omitempty"`
+	ImageURL    string       `json:"image_url,omitempty"`
+	Attachments []Attachment `json:"attachments,omitempty"`
 }
 
 //Attachment properties
@@ -23,6 +23,19 @@ type Attachment struct {
 type AttachmentFields struct {
 	Title string `json:"title"`
 	Short bool   `json:"short"`
+}
+
+func HandleMadeCoffeeEvent(channel string, username string) (string, error) {
+	itemBytes, err := json.Marshal(Message{
+		Channel:   "#" + channel,
+		Text:      "Coffee made by " + username,
+		IconEmoji: ":star2:",
+	})
+	fmt.Printf("itemJSON: %v\n", string(itemBytes))
+	if err != nil {
+		return "", err
+	}
+	return string(itemBytes), nil
 }
 
 func HandleIOTEvent() (string, error) {
