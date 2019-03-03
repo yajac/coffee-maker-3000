@@ -1,12 +1,12 @@
 package main
 
 import (
+	"./dynamodb"
 	"fmt"
-	"net/url"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/yajac/coffee-maker-3000/slack"
+	"net/url"
 )
 
 // Handler is executed by AWS Lambda in the main function. Once the request
@@ -34,11 +34,18 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Request Values: %v %v\n", text, username)
 
+	dbErr := dynamodb.UpdateLastCoffee(username)
+	if dbErr != nil {
+		return events.APIGatewayProxyResponse{}, dbErr
+	}
+
 	response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
 
 	if slackErr != nil {
 		return events.APIGatewayProxyResponse{}, slackErr
 	}
+
+	dynamodb.UpdateLastCoffee(username)
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
