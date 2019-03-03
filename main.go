@@ -45,8 +45,6 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, slackErr
 	}
 
-	dynamodb.UpdateLastCoffee(username)
-
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       string(response),
