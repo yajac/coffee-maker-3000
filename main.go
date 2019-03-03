@@ -36,12 +36,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	dbErr := dynamodb.UpdateLastCoffee(username)
 	if dbErr != nil {
+		fmt.Printf("DB Error: %v\n", dbErr)
 		return events.APIGatewayProxyResponse{}, dbErr
 	}
 
 	response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
 
 	if slackErr != nil {
+		fmt.Printf("Slack Error: %v\n", slackErr)
 		return events.APIGatewayProxyResponse{}, slackErr
 	}
 

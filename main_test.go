@@ -20,9 +20,8 @@ func TestHandler(t *testing.T) {
 	}
 
 	response, err := Handler(request)
-
+	assert.Equal(t, err, nil)
 	assert.Equal(t, expectedResponse.Headers, response.Headers)
 	assert.Equal(t, expectedResponse.Body, response.Body)
-	assert.Equal(t, err, nil)
 
 }
