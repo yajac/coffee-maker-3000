@@ -24,7 +24,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Values: %v\n", values)
 
-	command := values["command"]
+	command := values["command"][0]
 
 	fmt.Printf("Command: %v\n", command)
 
@@ -34,22 +34,27 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Request Values: %v %v\n", text, username)
 
-	dbErr := dynamodb.UpdateLastCoffee(username)
-	if dbErr != nil {
-		fmt.Printf("DB Error: %v\n", dbErr)
-		return events.APIGatewayProxyResponse{}, dbErr
-	}
+	var jsonResponse string
 
-	response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
+	if command == "/madecoffee" {
+		dbErr := dynamodb.UpdateLastCoffee(username)
+		if dbErr != nil {
+			fmt.Printf("DB Error: %v\n", dbErr)
+			return events.APIGatewayProxyResponse{}, dbErr
+		}
 
-	if slackErr != nil {
-		fmt.Printf("Slack Error: %v\n", slackErr)
-		return events.APIGatewayProxyResponse{}, slackErr
+		response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
+		jsonResponse = string(response)
+
+		if slackErr != nil {
+			fmt.Printf("Slack Error: %v\n", slackErr)
+			return events.APIGatewayProxyResponse{}, slackErr
+		}
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(response),
+		Body:       string(jsonResponse),
 		Headers: map[string]string{
 			"Content-Type": "application/json",
 		},
