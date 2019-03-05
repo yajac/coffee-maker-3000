@@ -15,6 +15,49 @@ type CoffeeItem struct {
 	Username  string `json:"username,omitempty"`
 }
 
+func GetUsers() (map[string]int, error) {
+
+	var usermap = make(map[string]int)
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-east-1"),
+	},
+	)
+	if err != nil {
+		return usermap, err
+	}
+	svc := dynamodb.New(sess)
+
+	params := &dynamodb.ScanInput{
+		TableName: aws.String("coffee"),
+		ExpressionAttributeNames: map[string]*string{
+			"#username": aws.String("username"),
+		},
+		FilterExpression: aws.String("attribute_exists(#username)"),
+	}
+	result, err := svc.Scan(params)
+	if err != nil {
+		return usermap, err
+	}
+
+	fmt.Printf("Scan Results: %v\n", result)
+
+	coffeeItem := CoffeeItem{}
+
+	for _, item := range result.Items {
+		fmt.Printf("Item: %v\n", item)
+		err = dynamodbattribute.UnmarshalMap(item, &coffeeItem)
+		if err != nil {
+			return usermap, err
+		}
+		count := usermap[coffeeItem.Username]
+		count++
+		usermap[coffeeItem.Username] = count
+	}
+
+	fmt.Printf("Map: %v\n", usermap)
+	return usermap, err
+}
+
 func UpdateLastCoffee(username string) error {
 
 	sess, err := session.NewSession(&aws.Config{
@@ -62,7 +105,6 @@ func UpdateItemInTable(svc *dynamodb.DynamoDB, coffee CoffeeItem, username strin
 		ExpressionAttributeNames: map[string]*string{
 			"#timestamp": aws.String("timestamp"),
 		},
-		// 'ExpressionAttributeNames' => array( "#hash_doc" => "hash" )
 		ConditionExpression: aws.String("#timestamp = :time"),
 		TableName:           aws.String("coffee"),
 		Key: map[string]*dynamodb.AttributeValue{
