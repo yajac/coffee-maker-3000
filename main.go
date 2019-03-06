@@ -5,8 +5,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/yajac/coffee-maker-3000/dynamodb"
-	//"github.com/yajac/coffee-maker-3000/slack"
-	"./slack"
+	"github.com/yajac/coffee-maker-3000/slack"
 	"net/url"
 	"sort"
 )
