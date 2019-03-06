@@ -65,7 +65,7 @@ func TestHandleLeaderBoard(t *testing.T) {
 		wantErr bool
 	}{
 		{"valid", args{"TestChannel", []string{"Ian 9", "Test 8", "Bah 7"}},
-			"{\"channel\":\"#TestChannel\",\"text\":\"*Coffee All Stars* \\n ```Ian 9```````Test 8```````Bah 7````\",\"icon_emoji\":\":star2:\"}", false},
+			"{\"channel\":\"#TestChannel\",\"text\":\"*Coffee All Stars* \\n ```Ian 9````\\n```Test 8````\\n```Bah 7````\\n\",\"icon_emoji\":\":star2:\"}", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -54,7 +54,7 @@ func HandleIOTEvent() (string, error) {
 func HandleLeaderBoard(channel string, leaders []string) (string, error) {
 	leaderBoardText := "*Coffee All Stars* \n "
 	for _, leader := range leaders {
-		leaderBoardText += "```" + leader + "````"
+		leaderBoardText += "```" + leader + "````\n"
 
 	}
 	itemBytes, err := json.Marshal(Message{
