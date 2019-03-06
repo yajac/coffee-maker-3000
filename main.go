@@ -7,7 +7,14 @@ import (
 	"github.com/yajac/coffee-maker-3000/dynamodb"
 	"github.com/yajac/coffee-maker-3000/slack"
 	"net/url"
+	"sort"
 )
+
+//User coffee usage
+type User struct {
+	user   string
+	coffee int
+}
 
 // Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
@@ -52,6 +59,16 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		}
 	}
 
+	if command == "/coffeeleader" {
+		userMap, dbErr := dynamodb.GetUsers()
+		fmt.Printf("UserMap: %v\n", userMap)
+		if dbErr != nil {
+			fmt.Printf("DB Error: %v\n", dbErr)
+			return events.APIGatewayProxyResponse{}, dbErr
+		}
+
+	}
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       string(jsonResponse),
@@ -60,6 +77,25 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		},
 	}, nil
 
+}
+
+func OrderUserMap(userMap map[string]int) []User {
+	fmt.Printf("UserMap Before: %v\n", userMap)
+
+	var users []User
+
+	for k := range userMap {
+		user := User{k, userMap[k]}
+		users = append(users, user)
+	}
+	sort.Slice(users, func(i, j int) bool {
+		return users[i].coffee > users[j].coffee
+	})
+
+	if len(users) > 10 {
+		users = users[:10]
+	}
+	return users
 }
 
 func main() {

@@ -13,7 +13,7 @@ func TestUpdateLastCoffee(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"Basic User", args{"testuser"}, false},
+		{"Update Last Coffee", args{"testuser"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -29,12 +29,14 @@ func TestGetUsers(t *testing.T) {
 		name    string
 		wantErr bool
 	}{
-		{"Get Users", false},
+		{"Get User", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := GetUsers(); (err != nil) != tt.wantErr {
+			_, err := GetUsers()
+			if (err != nil) != tt.wantErr {
 				t.Errorf("GetUsers() error = %v, wantErr %v", err, tt.wantErr)
+				return
 			}
 		})
 	}
