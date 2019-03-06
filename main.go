@@ -93,6 +93,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 }
 
+/// OrderUserMap takes in a user map of names and values and returns an ordered list of User objects
 func OrderUserMap(userMap map[string]int) []User {
 	fmt.Printf("UserMap Before: %v\n", userMap)
 

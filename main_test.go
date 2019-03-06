@@ -75,7 +75,7 @@ func testEq(a, b []User) bool {
 		return false
 	}
 
-	for i, _ := range a {
+	for i := range a {
 		if a[i] != b[i] {
 			fmt.Printf("Compare Item: %v  %v\n", a[i], b[i])
 			return false
