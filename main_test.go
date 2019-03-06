@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -83,4 +84,24 @@ func testEq(a, b []User) bool {
 	}
 
 	return true
+}
+
+func TestGetUserText(t *testing.T) {
+	type args struct {
+		userMap map[string]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{"Get User Text 1", args{map[string]int{"Ian": 9, "Test": 8, "Bah": 7, "imcewan": 1}}, []string{"Ian      9", "Test      8", "Bah      7", "imcewan      1"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetUserText(tt.args.userMap); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetUserText() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

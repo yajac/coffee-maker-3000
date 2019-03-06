@@ -8,6 +8,7 @@ import (
 	"github.com/yajac/coffee-maker-3000/slack"
 	"net/url"
 	"sort"
+	"strconv"
 )
 
 //User coffee usage
@@ -67,13 +68,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			return events.APIGatewayProxyResponse{}, dbErr
 		}
 		fmt.Printf("UserMap: %v\n", userMap)
-		users := OrderUserMap(userMap)
-		fmt.Printf("Users: %v\n", users)
-
-		var userList []string
-		for _, user := range users {
-			userList = append(userList, user.user+"      "+string(user.coffee))
-		}
+		userList := GetUserText(userMap)
 		response, slackErr := slack.HandleLeaderBoard(channel, userList)
 
 		jsonResponse = string(response)
@@ -93,6 +88,19 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 }
 
+//GetUserText for users get list of text
+func GetUserText(userMap map[string]int) []string {
+	users := OrderUserMap(userMap)
+	fmt.Printf("Users: %v\n", users)
+	var userList []string
+	for _, user := range users {
+		fmt.Printf("UserList user: %v\n", user)
+		userList = append(userList, user.user+"      "+strconv.Itoa(user.coffee))
+	}
+	fmt.Printf("UserList: %v\n", userList)
+	return userList
+}
+
 //OrderUserMap takes in a user map of names and values and returns an ordered list of User objects
 func OrderUserMap(userMap map[string]int) []User {
 	fmt.Printf("UserMap Before: %v\n", userMap)
@@ -110,6 +118,7 @@ func OrderUserMap(userMap map[string]int) []User {
 	if len(users) > 10 {
 		users = users[:10]
 	}
+	fmt.Printf("UserMap After: %v\n", userMap)
 	return users
 }
 
