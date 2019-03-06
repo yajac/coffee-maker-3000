@@ -5,7 +5,8 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/yajac/coffee-maker-3000/dynamodb"
-	"github.com/yajac/coffee-maker-3000/slack"
+	//"github.com/yajac/coffee-maker-3000/slack"
+	"./slack"
 	"net/url"
 	"sort"
 )
@@ -66,7 +67,21 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			fmt.Printf("DB Error: %v\n", dbErr)
 			return events.APIGatewayProxyResponse{}, dbErr
 		}
+		fmt.Printf("UserMap: %v\n", userMap)
+		users := OrderUserMap(userMap)
+		fmt.Printf("Users: %v\n", users)
 
+		var userList []string
+		for _, user := range users {
+			userList = append(userList, user.user+"      "+string(user.coffee))
+		}
+		response, slackErr := slack.HandleLeaderBoard(channel, userList)
+
+		jsonResponse = string(response)
+		if slackErr != nil {
+			fmt.Printf("Slack Error: %v\n", slackErr)
+			return events.APIGatewayProxyResponse{}, slackErr
+		}
 	}
 
 	return events.APIGatewayProxyResponse{

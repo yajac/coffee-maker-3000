@@ -50,3 +50,21 @@ func HandleIOTEvent() (string, error) {
 	}
 	return string(itemBytes), nil
 }
+
+func HandleLeaderBoard(channel string, leaders []string) (string, error) {
+	leaderBoardText := "*Coffee All Stars* \n "
+	for _, leader := range leaders {
+		leaderBoardText += "```" + leader + "````"
+
+	}
+	itemBytes, err := json.Marshal(Message{
+		Channel:   "#" + channel,
+		Text:      leaderBoardText,
+		IconEmoji: ":star2:",
+	})
+	fmt.Printf("itemJSON: %v\n", string(itemBytes))
+	if err != nil {
+		return "", err
+	}
+	return string(itemBytes), nil
+}

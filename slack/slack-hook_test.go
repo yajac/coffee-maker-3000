@@ -52,3 +52,31 @@ func TestHandleMadeCoffeeEvent(t *testing.T) {
 		})
 	}
 }
+
+func TestHandleLeaderBoard(t *testing.T) {
+	type args struct {
+		channel string
+		leaders []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{"valid", args{"TestChannel", []string{"Ian 9", "Test 8", "Bah 7"}},
+			"{\"channel\":\"#TestChannel\",\"text\":\"*Coffee All Stars* \\n ```Ian 9```````Test 8```````Bah 7````\",\"icon_emoji\":\":star2:\"}", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := HandleLeaderBoard(tt.args.channel, tt.args.leaders)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("HandleLeaderBoard() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("HandleLeaderBoard() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
