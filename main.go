@@ -95,7 +95,7 @@ func GetUserText(userMap map[string]int) []string {
 	var userList []string
 	for _, user := range users {
 		fmt.Printf("UserList user: %v\n", user)
-		userList = append(userList, user.user+"      "+strconv.Itoa(user.coffee))
+		userList = append(userList, fmt.Sprintf("%-12v", user.user)+strconv.Itoa(user.coffee))
 	}
 	fmt.Printf("UserList: %v\n", userList)
 	return userList

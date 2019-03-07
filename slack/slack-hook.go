@@ -3,6 +3,7 @@ package slack
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 //Message properties
@@ -53,8 +54,8 @@ func HandleIOTEvent() (string, error) {
 
 func HandleLeaderBoard(channel string, leaders []string) (string, error) {
 	leaderBoardText := "*Coffee All Stars* \n "
-	for _, leader := range leaders {
-		leaderBoardText += "```" + leader + "````\n"
+	for index, leader := range leaders {
+		leaderBoardText += "```" + strconv.Itoa(index+1) + ". " + leader + "```\n"
 
 	}
 	itemBytes, err := json.Marshal(Message{
