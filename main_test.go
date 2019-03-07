@@ -95,7 +95,7 @@ func TestGetUserText(t *testing.T) {
 		args args
 		want []string
 	}{
-		{"Get User Text 1", args{map[string]int{"Ian": 9, "Test": 8, "Bah": 7, "imcewan": 1}}, []string{"Ian      9", "Test      8", "Bah      7", "imcewan      1"}},
+		{"Get User Text 1", args{map[string]int{"Ian": 9, "Test": 8, "Bah": 7, "imcewan": 1}}, []string{"Ian         9", "Test        8", "Bah         7", "imcewan     1"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
