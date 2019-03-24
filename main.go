@@ -7,6 +7,7 @@ import (
 	"github.com/yajac/coffee-maker-3000/dynamodb"
 	"github.com/yajac/coffee-maker-3000/slack"
 	"net/url"
+	"os"
 	"sort"
 	"strconv"
 )
@@ -22,6 +23,10 @@ type User struct {
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	fmt.Printf("Request: %v\n", request)
+
+	key := os.Getenv("SlackKey")
+
+	fmt.Printf("SlackKey: %v\n", key)
 
 	fmt.Printf("Request Body: %v\n", request.Body)
 
