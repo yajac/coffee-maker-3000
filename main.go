@@ -37,50 +37,57 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	fmt.Printf("Values: %v\n", values)
 
-	command := values["command"][0]
+	jsonResponse := ""
 
-	fmt.Printf("Command: %v\n", command)
+	if values["command"] != nil {
+		command := values["command"][0]
 
-	username := values["user_name"][0]
-	text := values["text"][0]
-	channel := values["channel_name"][0]
+		fmt.Printf("Command: %v\n", command)
 
-	fmt.Printf("Request Values: %v %v\n", text, username)
+		username := values["user_name"][0]
+		text := values["text"][0]
+		channel := values["channel_name"][0]
 
-	var jsonResponse string
+		fmt.Printf("Request Values: %v %v\n", text, username)
 
-	if command == "/madecoffee" {
-		dbErr := dynamodb.UpdateLastCoffee(username)
-		if dbErr != nil {
-			fmt.Printf("DB Error: %v\n", dbErr)
-			return events.APIGatewayProxyResponse{}, dbErr
+		if command == "/madecoffee" {
+			dbErr := dynamodb.UpdateLastCoffee(username)
+			if dbErr != nil {
+				fmt.Printf("DB Error: %v\n", dbErr)
+				return events.APIGatewayProxyResponse{}, dbErr
+			}
+
+			response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
+			jsonResponse = string(response)
+
+			if slackErr != nil {
+				fmt.Printf("Slack Error: %v\n", slackErr)
+				return events.APIGatewayProxyResponse{}, slackErr
+			}
 		}
 
-		response, slackErr := slack.HandleMadeCoffeeEvent(channel, username)
-		jsonResponse = string(response)
+		if command == "/coffeeleader" {
+			userMap, dbErr := dynamodb.GetUsers()
+			fmt.Printf("UserMap: %v\n", userMap)
+			if dbErr != nil {
+				fmt.Printf("DB Error: %v\n", dbErr)
+				return events.APIGatewayProxyResponse{}, dbErr
+			}
+			fmt.Printf("UserMap: %v\n", userMap)
+			userList := GetUserText(userMap)
+			response, slackErr := slack.HandleLeaderBoard(channel, userList)
 
-		if slackErr != nil {
-			fmt.Printf("Slack Error: %v\n", slackErr)
-			return events.APIGatewayProxyResponse{}, slackErr
+			jsonResponse = string(response)
+			if slackErr != nil {
+				fmt.Printf("Slack Error: %v\n", slackErr)
+				return events.APIGatewayProxyResponse{}, slackErr
+			}
 		}
 	}
 
-	if command == "/coffeeleader" {
-		userMap, dbErr := dynamodb.GetUsers()
-		fmt.Printf("UserMap: %v\n", userMap)
-		if dbErr != nil {
-			fmt.Printf("DB Error: %v\n", dbErr)
-			return events.APIGatewayProxyResponse{}, dbErr
-		}
-		fmt.Printf("UserMap: %v\n", userMap)
-		userList := GetUserText(userMap)
-		response, slackErr := slack.HandleLeaderBoard(channel, userList)
-
-		jsonResponse = string(response)
-		if slackErr != nil {
-			fmt.Printf("Slack Error: %v\n", slackErr)
-			return events.APIGatewayProxyResponse{}, slackErr
-		}
+	if values["payload"] != nil {
+		payload := values["payload"][0]
+		fmt.Printf("Payload: %v\n", payload)
 	}
 
 	return events.APIGatewayProxyResponse{

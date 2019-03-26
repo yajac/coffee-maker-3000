@@ -6,6 +6,13 @@ import (
 	"strconv"
 )
 
+//SlackAPIResponse Slack API Response object
+type SlackAPIResponse struct {
+	Channel   string  `json:"channel"`
+	TimeStamp string  `json:"ts"`
+	Message   Message `json:"message"`
+}
+
 //Message properties
 type Message struct {
 	Channel     string       `json:"channel"`
