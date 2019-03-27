@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -88,6 +89,18 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	if values["payload"] != nil {
 		payload := values["payload"][0]
 		fmt.Printf("Payload: %v\n", payload)
+
+		var f interface{}
+		err := json.Unmarshal([]byte(payload), &f)
+
+		fmt.Printf("Interface: %v\n", f)
+		//dbErr := dynamodb.UpdateLastCoffee(username)
+		if err != nil {
+			fmt.Printf("Parse Error: %v\n", err)
+			return events.APIGatewayProxyResponse{}, err
+		}
+
+		//"user"
 	}
 
 	return events.APIGatewayProxyResponse{
