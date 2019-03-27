@@ -17,7 +17,9 @@ type SlackAPIResponse struct {
 type SlackAction struct {
 	CallBackId      string  `json:"callback_id"`
 	OriginalMessage Message `json:"original_message"`
-	User            User    `json:"text"`
+	User            User    `json:"user"`
+	Channel         User    `json:"channel"`
+	MessageTS       string  `json:"message_ts"`
 }
 
 //User properties
@@ -28,11 +30,11 @@ type User struct {
 
 //Message properties
 type Message struct {
-	Channel     string       `json:"channel"`
+	Channel     string       `json:"channel,omitempty"`
 	Text        string       `json:"text"`
 	IconEmoji   string       `json:"icon_emoji,omitempty"`
 	ImageURL    string       `json:"image_url,omitempty"`
-	username    string       `json:"username,omitempty"`
+	Username    string       `json:"username,omitempty"`
 	Attachments []Attachment `json:"attachments,omitempty"`
 }
 
