@@ -13,18 +13,33 @@ type SlackAPIResponse struct {
 	Message   Message `json:"message"`
 }
 
+//SlackAction properties
+type SlackAction struct {
+	CallBackId      string  `json:"callback_id"`
+	OriginalMessage Message `json:"original_message"`
+	User            User    `json:"text"`
+}
+
+//User properties
+type User struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 //Message properties
 type Message struct {
 	Channel     string       `json:"channel"`
 	Text        string       `json:"text"`
 	IconEmoji   string       `json:"icon_emoji,omitempty"`
 	ImageURL    string       `json:"image_url,omitempty"`
+	username    string       `json:"username,omitempty"`
 	Attachments []Attachment `json:"attachments,omitempty"`
 }
 
 //Attachment properties
 type Attachment struct {
-	Fields []AttachmentFields `json:"fields"`
+	Fields   []AttachmentFields `json:"fields"`
+	ImageURL string             `json:"image_url,omitempty"`
 }
 
 //AttachmentFields properties
