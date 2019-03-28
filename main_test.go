@@ -118,16 +118,18 @@ func Test_handleAction(t *testing.T) {
 	}{
 		{"Test 1", args{"{\"type\": \"interactive_message\",\"actions\": [{\"name\": \"madeCoffee\",\"type\": \"button\",\"value\": \"madecoffee\"}],\"callback_id\": \"made_coffee_button\",\"team\": {\"id\": \"T20SR8Z88\",\"domain\": \"veracity-group\"},\"channel\": {\"id\": \"G4SUM84ES\",\"name\": \"privategroup\"},\"user\": {\"id\": \"U4QV2NNLD\",\"name\": \"imcewan\"},\"action_ts\": \"1553653180.218368\",\"message_ts\": \"1553640191.001300\",\"attachment_id\": \"1\",\"token\": \"wT0pZ9TvmWNUgwBt5G21UTPA\",\"is_app_unfurl\": false,\"original_message\": {\"type\": \"message\",\"subtype\": \"bot_message\",\"text\": \"Coffee Started Cool Beans 2\",\"ts\": \"1553640191.001300\",\"username\": \"CoffeeMaker3000\",\"icons\": {\"emoji\": \":coffee:\",\"image_64\": \"https://a.slack-edge.com/37d58/img/emoji_2017_12_06/apple/2615.png\"        },\"bot_id\": \"BFKFXHQRL\",\"attachments\": [{\"image_url\": \"https://media2.giphy.com/media/KpB7H0EPBWdDW/giphy.gif\",\"fields\": [{\"title\": \"Coffee is Ready\",\"value\": \"\",\"short\": false}]},{\"callback_id\": \"made_coffee_button\",\"fallback\": \"Error\",\"id\": 1,\"actions\": [{\"id\": \"1\",  \"name\": \"madeCoffee\",\"text\": \"I made the Coffee!\",\"type\": \"button\",\"value\": \"madecoffee\",\"style\": \"\"}]}]},\"response_url\": \"https://hooks.slack.com/actions/T20SR8Z88/586845881424/KYPy4wa5PNudR7lPSklnyeuL\",\"trigger_id\": \"589231921588.68909305280.c35b382fab7ce582243832e964f1e7ff\"}"}, "{\"channel\":\"G4SUM84ES\",\"text\":\"Coffee Started Cool Beans 2\",\"attachments\":[{\"fields\":[{\"title\":\"Coffee is Ready\",\"short\":false}],\"image_url\":\"https://media2.giphy.com/media/KpB7H0EPBWdDW/giphy.gif\"}]}", false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := handleAction(tt.args.payload)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("handleAction() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("handleAction() = %v, want %v", got, tt.want)
-			}
-		})
+	if testing.Short() {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				got, err := handleAction(tt.args.payload)
+				if (err != nil) != tt.wantErr {
+					t.Errorf("handleAction() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
+				if got != tt.want {
+					t.Errorf("handleAction() = %v, want %v", got, tt.want)
+				}
+			})
+		}
 	}
 }
