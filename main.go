@@ -89,18 +89,10 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	if values["payload"] != nil {
 		payload := values["payload"][0]
 		fmt.Printf("Payload: %v\n", payload)
-
-		var f interface{}
-		err := json.Unmarshal([]byte(payload), &f)
-
-		fmt.Printf("Interface: %v\n", f)
-		//dbErr := dynamodb.UpdateLastCoffee(username)
+		jsonResponse, err = handleAction(payload)
 		if err != nil {
-			fmt.Printf("Parse Error: %v\n", err)
 			return events.APIGatewayProxyResponse{}, err
 		}
-
-		//"user"
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -145,6 +137,31 @@ func OrderUserMap(userMap map[string]int) []User {
 	}
 	fmt.Printf("UserMap After: %v\n", userMap)
 	return users
+}
+
+func handleAction(payload string) (string, error) {
+	fmt.Printf("Payload: %v\n", payload)
+
+	var slackAction slack.SlackAction
+	err := json.Unmarshal([]byte(payload), &slackAction)
+	if err != nil {
+		return "", err
+	}
+	fmt.Printf("SlackAction: %v\n", slackAction)
+
+	//dbErr := dynamodb.UpdateLastCoffee(slackAction.User.Name)
+	//if dbErr != nil {
+	//	return "", dbErr
+	//}
+
+	itemBytes, err := json.Marshal(slack.Message{
+		Channel: "#coffee",
+		Text:    "FRESH COFFEE!! UPDATE",
+	})
+	if err != nil {
+		return "", err
+	}
+	return string(itemBytes), nil
 }
 
 func main() {
