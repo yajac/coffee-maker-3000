@@ -149,18 +149,22 @@ func handleAction(payload string) (string, error) {
 	}
 	fmt.Printf("SlackAction: %v\n", slackAction)
 
-	//dbErr := dynamodb.UpdateLastCoffee(slackAction.User.Name)
-	//if dbErr != nil {
-	//	return "", dbErr
-	//}
+	dbErr := dynamodb.UpdateLastCoffee(slackAction.User.Name)
+	if dbErr != nil {
+		return "", dbErr
+	}
 
 	itemBytes, err := json.Marshal(slack.Message{
-		Channel: "#coffee",
-		Text:    "FRESH COFFEE!! UPDATE",
+		Channel:     slackAction.Channel.Id,
+		Text:        slackAction.OriginalMessage.Text,
+		Attachments: []slack.Attachment{slackAction.OriginalMessage.Attachments[0]},
 	})
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Printf("Response back to Slack: %v\n", string(itemBytes))
+
 	return string(itemBytes), nil
 }
 
