@@ -156,7 +156,7 @@ func handleAction(payload string) (string, error) {
 
 	itemBytes, err := json.Marshal(slack.Message{
 		Channel: "#coffee",
-		Text:    "FRESH COFFEE!! UPDATE ",
+		Text:    "FRESH COFFEE!! UPDATE",
 	})
 	if err != nil {
 		return "", err
